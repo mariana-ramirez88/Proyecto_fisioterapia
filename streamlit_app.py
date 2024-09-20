@@ -9,6 +9,7 @@ st.header("Responde las siguientes preguntas:")
 # Question
 question = "¿Cuántas horas duermes al día?"
 st.write(question)
+st.selectbox('Select', ["menos de 5","entre 6 y 8","más de 8"])
 
 # User input (dropdown, radio buttons, or text input)
 user_answer = st.radio(
