@@ -23,38 +23,33 @@ valores_respuestasF5 = {
     "no": 0
 }
 
-# Lista para almacenar la respuesta de esta pregunta
+# Lista para almacenar las respuestas
 respuestasF5 = []
 
-# Radio para la pregunta
+# Preguntas de sueño
 user_sleepF5_1 = st.radio(
     "¿Despiertas más cansado de lo que estabas antes de acostarte?",
-    list(valores_respuestasF5.keys())  # Aquí cerramos el paréntesis
+    list(valores_respuestasF5.keys())
 )
-# Guardar la respuesta seleccionada
 respuestasF5.append(valores_respuestasF5[user_sleepF5_1])
 
-
-# Question 4
 user_sleepF5_2 = st.radio(
     "¿Te sientes cansado la mayor parte del día?",
-    list(valores_respuestas.keys())
+    list(valores_respuestasF5.keys())
 )
 respuestasF5.append(valores_respuestasF5[user_sleepF5_2])
 
-# Question 5
 user_sleepF5_3 = st.radio(
     "¿Fue difícil levantarte en la mañana?",
-    list(valores_respuestas.keys())
+    list(valores_respuestasF5.keys())
 )
 respuestasF5.append(valores_respuestasF5[user_sleepF5_3])
 
-# Question 5
-user_sleepF5_3 = st.radio(
+user_sleepF5_4 = st.radio(
     "¿Sientes necesidad de acostarte y levantarte más tarde que los demás?",
-    list(valores_respuestas.keys())
+    list(valores_respuestasF5.keys())
 )
-respuestasF5.append(valores_respuestasF5[user_sleepF5_3])
+respuestasF5.append(valores_respuestasF5[user_sleepF5_4])
 
 # Calcular el promedio de las respuestas
 if respuestasF5:  
@@ -73,6 +68,4 @@ if st.button("Submit"):
         else:
             score = 1
             st.error(f"Tienes un alto riesgo de dolor crónico: {score}.")
-        
-        # Displaying user's sleep data
-        st.write(f"Has indicado que duermes {user_sleep} horas al día.")
+
