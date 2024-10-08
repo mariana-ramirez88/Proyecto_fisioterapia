@@ -17,11 +17,49 @@ user_age = st.radio(
     ('10-12', '13-15', '16-18', 'mayor a 18')
 )
 
-# Question 3: Sleep hours
-user_sleep = st.radio(
-    "¿Cuántas horas duermes al día?:",
-    ('5 o menos', '6-8', 'más de 8')
+# Question 3: Sleep Factor 5
+valores_respuestasF5 = {
+    "sí": 1,
+    "no": 0
+}
+
+# Lista para almacenar la respuesta de esta pregunta
+respuestasF5 = []
+
+# Radio para la pregunta
+user_sleepF5_1 = st.radio(
+    "¿Despiertas más cansado de lo que estabas antes de acostarte?",
+    list(valores_respuestasF5.keys())  # Aquí cerramos el paréntesis
 )
+# Guardar la respuesta seleccionada
+respuestasF5.append(valores_respuestasF5[user_sleepF5_1])
+
+
+# Question 4
+user_sleepF5_2 = st.radio(
+    "¿Te sientes cansado la mayor parte del día?",
+    list(valores_respuestas.keys())
+)
+respuestasF5.append(valores_respuestasF5[user_sleepF5_2])
+
+# Question 5
+user_sleepF5_3 = st.radio(
+    "¿Fue difícil levantarte en la mañana?",
+    list(valores_respuestas.keys())
+)
+respuestasF5.append(valores_respuestasF5[user_sleepF5_3])
+
+# Question 5
+user_sleepF5_3 = st.radio(
+    "¿Sientes necesidad de acostarte y levantarte más tarde que los demás?",
+    list(valores_respuestas.keys())
+)
+respuestasF5.append(valores_respuestasF5[user_sleepF5_3])
+
+# Calcular el promedio de las respuestas
+if respuestasF5:  
+    promedio = sum(respuestasF5) / len(respuestasF5)
+    st.write("El promedio de tus respuestas es:", promedio)
 
 # Button to submit the answers
 if st.button("Submit"):
