@@ -24,7 +24,7 @@ valores_respuestasF5 = {
     "nunca": 0,
     "ocasionalmente": 1,
     'frecuentemente': 2,
-    'siemrpe':3
+    'siempre':3
 }
 
 # Lista para almacenar las respuestas
