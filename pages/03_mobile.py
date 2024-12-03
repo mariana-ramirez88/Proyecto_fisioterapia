@@ -15,13 +15,14 @@ def generar_preguntas(preguntas, opciones):
 # Diccionario de opciones de respuesta
 valores_respuestas_mobile = {
     "nunca": 0,
-    "ocasionalmente": 1,
-    'frecuentemente': 2,
-    'siemrpe':3
+    "Rara vez": 1,
+    'A veces': 2,
+    'Con frecuencia':3,
+    'Muchas Veces': 4
 }
 
 # Lista de preguntas
-preguntas = [
+preguntas_m1 = [
     "Me han llamado la atención o me han hecho alguna advertencia por utilizar mucho el celular",
     "Me he puesto un límite de uso y lo he podido cumplir?",
     "He discutido con algún familiar por el gasto económico que hagp del celular",
@@ -31,8 +32,18 @@ preguntas = [
     "Gasto más dinero con el celular del que me había previsto",
     "Cuando me aburro, utilizo el celular",
     "Utilizo el celular en situaciones que, aunque no son peligrosas, no es correcto hacerlo (comiendo, mientras otras personas me hablan, etc.)",
-    "Me han reñido (regañado) por el gasto económico del celular",
-    "Cuando llevo un tiempo sin utilizar el celular, siento la necesidad de usarlo (llamar a alguien, enviar un SMS o un WhatsApp, etc.)",
+    "Me han reñido (regañado) por el gasto económico del celular"]
+
+# Diccionario de opciones de respuesta
+valores_respuestas_mobile2 = {
+    "Totalmente en desacuerdo": 0,
+    "Un poco en desacuerdo": 1,
+    'Neutral': 2,
+    'Un poco de acuerdo':3,
+    'Totalmente de acuerdo': 4
+}
+
+preguntas_m2 =["Cuando llevo un tiempo sin utilizar el celular, siento la necesidad de usarlo (llamar a alguien, enviar un SMS o un WhatsApp, etc.)",
     "Últimamente utilizo mucho más el celular",
     "Si se me estropeara (dañara) el celular durante un periodo largo de tiempo y tardarán en arreglarlo, me encontraría mal",
     "Cada vez necesito utilizar el celular con más frecuencia",
@@ -47,7 +58,11 @@ preguntas = [
 ]
 
 # Generar preguntas y obtener respuestas
-respuestas_mobile = generar_preguntas(preguntas, valores_respuestas_mobile)
+respuestas_mobile1 = generar_preguntas(preguntas_m1, valores_respuestas_mobile)
+st.write("Indique en qué medida está de acuerdo o en desacuerdo con las afirmaciones que se presentan a continuación")
+respuestas_mobile2 = generar_preguntas(preguntas_m2, valores_respuestas_mobile2)
+
+respuestas_mobile = respuestas_mobile1 + respuestas_mobile2
 
 # Calcular la media de las respuestas
 promedio_mobile = np.mean(respuestas_mobile)
