@@ -4,9 +4,11 @@ import pandas as pd
 
 st.title("Resultados de la Encuesta")
 # variables guardadas
-age16_18 = st.session_state["user_age16"]
-age13_15 = st.session_state["user_age13"]
-st.write(f"tienes de 16 a 18 años", age16_18)
+age = st.session_state["user_age"]
+st.write(f"el usuario tiene {age}")
+user_age16 = 1 if age == '16-18' else 0
+user_age13 = 1 if age == '13-15' else 0
+
 promedioF5 = st.session_state["promedioF5"]
 promedioF2 = st.session_state["promedioF2"]
 promedioF3 = st.session_state['promedioF3']
@@ -34,8 +36,8 @@ st.write(f"futbol {activity_football_value}")
 
 user_df = {'sleep_factor_5':promedioF5, 'sleep_factor_2':promedioF2, 'sleep_factor_3': promedioF3, 'home_pets': home_pets,
        'home_cleaning':home_cleaning, 'activity_weightlifting':activity_weights_value, 'genre':user_gender, 'activity_playing':activity_play_value,
-       'home_laundry':home_laundry, 'home_room':home_room, 'mobile_dependency':promedio_mobile, 'age_group_13-15':age13_15,
-       'age_group_16-18':age16_18, 'home_area':zone, 'activity_football':activity_football_value}
+       'home_laundry':home_laundry, 'home_room':home_room, 'mobile_dependency':promedio_mobile, 'age_group_13-15':user_age13,
+       'age_group_16-18':user_age16, 'home_area':zone, 'activity_football':activity_football_value}
 
 print(user_df)
 ## Modelo 
@@ -51,8 +53,6 @@ with open('best_models.pkl', 'rb') as file:
 with open('risk_probabilities.pkl', 'rb') as file2:
     probs = pickle.load(file2)
     print("best risk prob loaded")
-
-
 
 
 
