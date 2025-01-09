@@ -50,7 +50,7 @@ with open('best_models.pkl', 'rb') as file:
  
 ## TODO que versiones de pandas,sk,python se usaron
 
-with open('risk_probabilities.pkl', 'rb') as file2:
+with open('risk_df_xs.pkl', 'rb') as file2:
     probs = pickle.load(file2)
     print("best risk prob loaded")
 
