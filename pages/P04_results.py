@@ -1,23 +1,18 @@
 import streamlit as st
 import pickle
 import pandas as pd
+import numpy as np
 
 st.title("Resultados de la Encuesta")
 # variables guardadas
 age = st.session_state["user_age"]
-st.write(f"el usuario tiene {age}")
-user_age16 = 1 if age == '16-18' else 0
-user_age13 = 1 if age == '13-15' else 0
 
 promedioF5 = st.session_state["promedioF5"]
 promedioF2 = st.session_state["promedioF2"]
 promedioF3 = st.session_state['promedioF3']
 
-st.write(f"promedio f5 {promedioF5}")
-
 
 zone = st.session_state['user_home']
-st.write(f"vives en una ZONA {zone}")
 home_room = st.session_state['user_home_room']
 home_laundry = st.session_state['user_home_laundry']
 
@@ -32,27 +27,33 @@ activity_weights_value = st.session_state['user_activity_weights']
 activity_play_value = st.session_state['user_activity_play']
 activity_football_value = st.session_state['user_activity_football']
 
-st.write(f"futbol {activity_football_value}")
+user_df = {'sleep_factor_5':promedioF5, 'home_laundry':home_laundry, 'sleep_factor_2':promedioF2, 'home_room':home_room,
+           'mobile_dependency':promedio_mobile,  'age_group_16-18':age,  'home_area':zone,'sleep_factor_3': promedioF3, 'home_pets': home_pets,
+       'home_cleaning':home_cleaning, 'activity_weightlifting':activity_weights_value, 'genre':user_gender, 'activity_football':activity_football_value}
 
-user_df = {'sleep_factor_5':promedioF5, 'sleep_factor_2':promedioF2, 'sleep_factor_3': promedioF3, 'home_pets': home_pets,
-       'home_cleaning':home_cleaning, 'activity_weightlifting':activity_weights_value, 'genre':user_gender, 'activity_playing':activity_play_value,
-       'home_laundry':home_laundry, 'home_room':home_room, 'mobile_dependency':promedio_mobile, 'age_group_13-15':user_age13,
-       'age_group_16-18':user_age16, 'home_area':zone, 'activity_football':activity_football_value}
+     ### 'activity_playing':activity_play_value, 'age_group_13-15':user_age13}"""
 
 print(user_df)
 ## Modelo 
+user_df = pd.DataFrame([user_df])
+# Definimos una función para cargarlo
+def load_model(filename):
+    with open(filename, 'rb') as file:
+        return pickle.load(file)
+    
+# cargamos los modelos y el risk_df
+test_models = load_model('best_models.pkl')
+risk_df_xs = load_model('risk_df_xs.pkl')
 
 
-with open('best_models.pkl', 'rb') as file:
-    best_models = pickle.load(file)
-    print("best models loaded")
+score = np.mean([model.predict_proba(user_df)[0,1] for model in test_models])
+st.write(score)
 
- 
-## TODO que versiones de pandas,sk,python se usaron
+def get_risk_level(score, risk_df):
+    for index, row in risk_df.iterrows():
+        if score>=row['beg'] and score<=row['beg']+row['width']:
+            return row['risk_level'], row['real']
+    
 
-with open('risk_df_xs.pkl', 'rb') as file2:
-    probs = pickle.load(file2)
-    print("best risk prob loaded")
-
-
-
+risk_level, risk_value = get_risk_level(score, risk_df_xs)
+st.write(f"tienes un nivel de riesgo {risk_level} con un puntaje de: {risk_value}")

@@ -46,7 +46,8 @@ questions = [
 { "question": "¿Cuál es tu edad?",
     "session_key": "user_age",
     "radio_key":"age",
-    "options": ['10-12', '13-15', '16-18', 'mayor a 18']
+    "options": ['10-12', '13-15', '16-18', 'mayor a 18'],
+    "default_value_map": {"10-12":0, '13-15':0,"16-18":1, 'mayor a 18':0 }
     },
 
      { "question": "La zona en que usted vive es:",
@@ -59,7 +60,8 @@ questions = [
     { "question": "¿Cuál es su género?",
     "session_key": "user_gender",
     "radio_key":"gender",
-    "options": ["Femenino", "Masculino", "Otro"],
+    "options": ["Femenino", "Masculino"],
+    "default_value_map": {"Femenino":0, "Masculino":1 }
     },
 
     { "question": "¿Realizas tareas del hogar como tender tu cama o arreglar tu cuarto?",
