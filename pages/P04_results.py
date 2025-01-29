@@ -5,6 +5,9 @@ import numpy as np
 import os
 
 st.title("Resultados de la Encuesta")
+
+print("·········Current working directory:", os.getcwd())
+
 # variables guardadas
 age = st.session_state["user_age"]
 
