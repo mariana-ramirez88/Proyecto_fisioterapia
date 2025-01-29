@@ -39,7 +39,8 @@ print(user_df)
 user_df = pd.DataFrame([user_df])
 # Definimos una función para cargarlo
 def load_model(filename):
-    path = os.path.join(os.getcwd(),filename) # get full path 
+    script_dir = os.path.dirname(os.path.abspath(__file__))  # Get script directory
+    path = os.path.join(script_dir, filename)
     with open(path, 'rb') as file:
         return pickle.load(file)
     
