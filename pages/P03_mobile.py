@@ -143,3 +143,4 @@ averageM2 = st.session_state["averageM2"]
 promedio_mobile = (averageM1 + averageM2)/2
 st.session_state['promedio_mobile'] = promedio_mobile
 
+#TODO review promedio_mobile errors 

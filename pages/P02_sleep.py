@@ -39,7 +39,7 @@ def initialize_radio_var(question, session_key, radio_key, answers, ans_list = "
              # Calculate and display the average after the answer change
             average = calculate_average(ans_list)
             st.session_state[average_key] = average
-            st.write(f"Average: {average_key}: {average}")
+            #st.write(f"Average: {average_key}: {average}")
             
         st.radio(
             question, options=answers, key=radio_key, on_change=update_variable
@@ -60,7 +60,7 @@ def initialize_radio_var(question, session_key, radio_key, answers, ans_list = "
             # Calculate and store the average under a unique key
             average = calculate_average(ans_list)
             st.session_state[average_key] = average  # Store average in session state with the unique key
-            st.write(f"Average ({average_key}): {average}")
+            #st.write(f"Average ({average_key}): {average}")
         st.radio(question, options=answers, key=radio_key, on_change=update_variable)
 
 

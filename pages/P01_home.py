@@ -2,11 +2,8 @@ import streamlit as st
 
 st.header('Preguntas Sociodemográficas')
 
-
-
 # PREGUNTAS RELACIONADAS AL HOGAR
 # home area
-
 
 def initialize_radio_var(question, session_key, radio_key, answers, default_value_map=None):
     if default_value_map:
@@ -127,4 +124,4 @@ for i in range(len(questions2)):
 
     )
 
-## TODO arreglar genero y edad
+## TODO arreglar genero

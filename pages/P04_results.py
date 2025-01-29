@@ -19,7 +19,6 @@ home_room = st.session_state['user_home_room']
 home_laundry = st.session_state['user_home_laundry']
 
 promedio_mobile = st.session_state['promedio_mobile']
-st.write(f" mobile use {promedio_mobile}")
 
 user_gender = st.session_state["user_gender"]
 home_cleaning = st.session_state['user_home_cleaning']
@@ -49,7 +48,7 @@ risk_df_xs = load_model('risk_df_xs.pkl')
 
 
 score = np.mean([model.predict_proba(user_df)[0,1] for model in test_models])
-st.write(score)
+st.write(f"obtuviste un puntaje de {score}")
 
 def get_risk_level(score, risk_df):
     for index, row in risk_df.iterrows():
@@ -58,4 +57,14 @@ def get_risk_level(score, risk_df):
     
 
 risk_level, risk_value = get_risk_level(score, risk_df_xs)
-st.write(f"tienes un nivel de riesgo {risk_level} con un puntaje de: {risk_value}")
+
+risk_mapping = {
+    "low risk":"bajo",
+     "medium risk": "medio",
+     "high risk": "alto",
+     "critical risk": "critico"
+}
+
+nivel_riesgo = risk_mapping.get(risk_level, "desconocido")  # Default value if not found
+
+st.write(f"Tienes un nivel de riesgo {nivel_riesgo} con un puntaje de: {risk_value}")
