@@ -2,6 +2,7 @@ import streamlit as st
 import pickle
 import pandas as pd
 import numpy as np
+import os
 
 st.title("Resultados de la Encuesta")
 # variables guardadas
@@ -38,7 +39,8 @@ print(user_df)
 user_df = pd.DataFrame([user_df])
 # Definimos una función para cargarlo
 def load_model(filename):
-    with open(filename, 'rb') as file:
+    path = os.path.join(os.getcwd(),filename) # get full path 
+    with open(path, 'rb') as file:
         return pickle.load(file)
     
 # cargamos los modelos y el risk_df
