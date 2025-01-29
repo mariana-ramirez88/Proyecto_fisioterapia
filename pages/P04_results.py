@@ -6,8 +6,6 @@ import os
 
 st.title("Resultados de la Encuesta")
 
-print("·········Current working directory:", os.getcwd())
-
 # variables guardadas
 age = st.session_state["user_age"]
 
@@ -42,9 +40,7 @@ print(user_df)
 user_df = pd.DataFrame([user_df])
 # Definimos una función para cargarlo
 def load_model(filename):
-    script_dir = os.path.dirname(os.path.abspath(__file__))  # Get script directory
-    path = os.path.join(script_dir, filename)
-    with open(path, 'rb') as file:
+    with open(filename, 'rb') as file:
         return pickle.load(file)
     
 # cargamos los modelos y el risk_df
