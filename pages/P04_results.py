@@ -2,8 +2,9 @@ import streamlit as st
 import pickle
 import pandas as pd
 import numpy as np
-import os
+from pages.P01_home import sidebar_style
 
+sidebar_style()
 st.title("Resultados de la Encuesta")
 
 # variables guardadas

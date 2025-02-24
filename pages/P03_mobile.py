@@ -1,6 +1,9 @@
 import streamlit as st 
 import numpy as np
 from pages.P02_sleep import make_questions
+from pages.P01_home import sidebar_style
+
+sidebar_style()
 
 def initialize_radio_var(question, session_key, radio_key, answers, ans_list = "answers list", default_value_map=None, average_key = "average"):
     

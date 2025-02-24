@@ -1,5 +1,8 @@
 import streamlit as st
 import numpy as np
+from pages.P01_home import sidebar_style
+
+sidebar_style()
 
 st.subheader('Preguntas Relacionadas al Sueño')
 st.write("Responda Con qué frecuencia en días, en la última semana, le sucedieron los siguientes eventos:")
@@ -23,13 +26,16 @@ def initialize_radio_var(question, session_key, radio_key, answers, ans_list = "
     if default_value_map:
         # When there is a numerical mapping for answers
         if session_key not in st.session_state:
-            st.session_state[session_key] = default_value_map[answers[0]]
+            st.session_state[session_key] = None
 
         if radio_key not in st.session_state:
+            if session_key in st.session_state and st.session_state[session_key] is not None:
             # Reverse mapping to selected stored answer
-            reverse_map = {v: k for k, v in default_value_map.items()}
-            selected_option = reverse_map.get(st.session_state[session_key], answers[0])
-            st.session_state[radio_key] = selected_option
+                reverse_map = {v: k for k, v in default_value_map.items()}
+                selected_option = reverse_map.get(st.session_state[session_key], None)
+                st.session_state[radio_key] = selected_option
+            else:
+                st.session_state[radio_key] = None 
 
         def update_variable():
             st.session_state[session_key] = default_value_map[st.session_state[radio_key]]
@@ -42,17 +48,19 @@ def initialize_radio_var(question, session_key, radio_key, answers, ans_list = "
             #st.write(f"Average: {average_key}: {average}")
             
         st.radio(
-            question, options=answers, key=radio_key, on_change=update_variable
+            question, options=answers, key=radio_key, on_change=update_variable,index=None
         )
     else:
         # When no mapping is provided
         if session_key not in st.session_state:
-            st.session_state[session_key] = answers[0]
+            st.session_state[session_key] = None
 
         if radio_key not in st.session_state:
             # Synchronize radio_key with session_key
-            st.session_state[radio_key] = st.session_state[session_key]
-
+           if session_key in st.session_state and st.session_state[session_key] is not None:
+            st.session_state[radio_key] = st.session_state[session_key]  # Restore stored value
+        else:
+            st.session_state[radio_key] = None  # No default selection
         def update_variable():
             st.session_state[session_key] = st.session_state[radio_key]
             # Update the response list dictionary with the session_key and the selected answer
@@ -61,7 +69,7 @@ def initialize_radio_var(question, session_key, radio_key, answers, ans_list = "
             average = calculate_average(ans_list)
             st.session_state[average_key] = average  # Store average in session state with the unique key
             #st.write(f"Average ({average_key}): {average}")
-        st.radio(question, options=answers, key=radio_key, on_change=update_variable)
+        st.radio(question, options=answers, key=radio_key, on_change=update_variable, index=None)
 
 
 questionsF5 = ["Despertó más cansado que cuando se acostó","Sintió cansancio la mayor parte del día", "Fue difícil levantarse en la mañana",
