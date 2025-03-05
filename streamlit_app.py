@@ -48,11 +48,23 @@ def load_page(page_name):
 current_page = st.session_state.page
 load_page(current_page)
 
-# Lógica del botón "Siguiente"
-if current_page != "home": #Only show next button when not on the homepage.
-    current_index = pages_list.index(current_page)
+# Obtener el índice de la página actual
+current_index = pages_list.index(current_page)
+
+# Crear columnas para alinear los botones
+col1, col2 = st.columns([1, 1])  # Dos columnas de igual tamaño
+
+# Botón "Regresar" (solo si no estamos en la página principal)
+with col1:
+    if current_page != "home" and current_index > 0:
+        if st.button("⬅️ Regresar"):
+            st.session_state.page = pages_list[current_index - 1]
+            st.rerun()  # Recargar la aplicación para mostrar la página anterior
+
+# Botón "Siguiente" (se muestra en todas las páginas excepto la última)
+with col2:
     if current_index + 1 < len(pages_list):
-        if st.button("Siguiente"):
+        if st.button("Siguiente ➡️"):
             st.session_state.page = pages_list[current_index + 1]
             st.rerun()  # Recargar la aplicación para mostrar la siguiente página
 
