@@ -3,6 +3,9 @@ import pickle
 import pandas as pd
 import numpy as np
 from pages.P01_home import sidebar_style
+from PIL import Image
+import base64
+
 
 sidebar_style()
 
@@ -15,7 +18,7 @@ def app():
 
     #  Only show the button if calculate_model is False
     if not st.session_state.calculate_model:
-        st.write("Por favor, haga clic en 'Finalizar' para ver los resultados.")
+        st.write("Por favor, haga clic en 'Finalizar' para ver los resultados. Esto puede tomar un tiempo")
 
         if st.button("Finalizar"):
             st.session_state.calculate_model = True
@@ -58,7 +61,7 @@ def app():
     risk_df_xs = load_model('risk_df_xs.pkl')
 
     score = np.mean([model.predict_proba(user_df)[0, 1] for model in test_models])
-    st.write(f"Obtuviste un puntaje de {score}")
+    #st.write(f"Obtuviste un puntaje de {score}")
 
     def get_risk_level(score, risk_df):
         for _, row in risk_df.iterrows():
@@ -68,17 +71,49 @@ def app():
     risk_level, risk_value = get_risk_level(score, risk_df_xs)
 
     risk_mapping = {
-        "low risk": "bajo",
-        "medium risk": "medio",
-        "high risk": "alto",
-        "critical risk": "crítico"
+    "low risk": "Tienes un nivel de riesgo BAJO",
+    "medium risk": "Tienes un nivel de riesgo MEDIO",
+    "high risk": "Tienes un nivel de riesgo ALTO",
+    "critical risk": "Tienes un nivel de riesgo CRÍTICO"
     }
 
-    nivel_riesgo = risk_mapping.get(risk_level, "desconocido")
+    color_mapping = {
+        "bajo": "green",
+        "medio": "yellow",
+        "alto": "orange",
+        "crítico": "red"
+    }
 
-    st.write(f"Tienes un nivel de riesgo **{nivel_riesgo}** con un puntaje de: {risk_value}")
+    # Determinar el texto completo del nivel de riesgo
+    texto_riesgo = risk_mapping.get(risk_level, "Nivel de riesgo DESCONOCIDO")
+    nivel_riesgo = texto_riesgo.split()[-1].lower()
 
-    #  Optional: Reset model calculation if needed
-    if st.button("Reiniciar cálculo"):
-        st.session_state.calculate_model = False
+    # Determinar el color correspondiente
+    color = color_mapping.get(nivel_riesgo, "grey")
+
+    # Mostrar la probabilidad
+    st.write(f"Tienes una probabilidad de **{risk_value * 100:.0f}%** de padecer dolor musculoesquelético")
+
+    # Mostrar el texto completo del riesgo con la barra de color
+    st.markdown(
+        f"<div style='padding: 10px; border-radius: 5px; background-color: {color}; color: black; text-align: center; font-weight: bold;'>"
+        f"{texto_riesgo}"
+        f"</div>",
+        unsafe_allow_html=True
+    )
+
+    with open("recomendaciones.jpeg", "rb") as imagen:
+        img_base64 = base64.b64encode(imagen.read()).decode()
+
+    st.markdown(
+        f"""
+        <div style="display: flex; justify-content: center;">
+            <img src="data:image/jpeg;base64,{img_base64}" style="max-width:100%; height:auto;"/>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    if st.button("Regresar ⬅️",key="button4"):
+        st.session_state.page = "P03_mobile"  # Avanzar a la siguiente página
         st.rerun()

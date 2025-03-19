@@ -99,8 +99,6 @@ def app():
         '5-6 días':3
     }
 
-    # Lista para almacenar las respuestas
-    respuestasF5 = []
         
     make_questions(questionsF5,session_keys,radio_keys,valores_respuestasF5,"respuestasF5","promedioF5")
 
@@ -109,8 +107,7 @@ def app():
     questionsF2 = ["Tuvo pesadillas", "Despertó con miedo","Despertó sudando por algo que soñó", "Soñó algo que le dio miedo"]
     session_keysF2 = ['userF2.1', 'userF2.2', 'userF2.3', 'userF2.4']
     radio_keysF2 = ['sleepF2.1','sleepF2.2', 'sleepF2.3','sleepF2.4']
-    # opciones de respuesta iguales a F5
-    respuestasF2 = []
+
     make_questions(questionsF2,session_keysF2,radio_keysF2,valores_respuestasF5,"respuestasF2","promedioF2")
 
     preguntas_F3 = [
@@ -129,8 +126,28 @@ def app():
 
     session_keysF3 = ['userF3.1', 'userF3.2', 'userF3.3', 'userF3.4', 'userF3.5']
     radio_keysF3 = ['sleepF3.1','sleepF3.2', 'sleepF3.3','sleepF3.4','sleepF3.5']
-    respuestasF3 = []
     make_questions(preguntas_F3,session_keysF3,radio_keysF3,valores_F3,"respuestasF3","promedioF3")
+
+    # Verificar si todas las preguntas han sido respondidas
+    all_session_keys = session_keys + session_keysF2 + session_keysF3
+    all_answered = all(st.session_state.get(key) is not None for key in all_session_keys)
+
+    # Botón de siguiente deshabilitado si no se han respondido todas las preguntas
+    # Colocar los botones en la parte inferior
+    col1, col2, col3 = st.columns([1, 4, 1])
+
+    with col1:
+        if st.button("⬅️ Regresar", key="back2_button"):
+            st.session_state.page = "P01_home"  # Cambia esto según corresponda
+            st.rerun()
+    with col3:
+        if st.button("Siguiente ➡️", key="next2_button"):
+            if not all_answered:
+                st.warning("Por favor, responda todas las preguntas antes de continuar.")
+            else:
+                st.session_state.page = "P03_mobile"
+                st.rerun()
+
 
 
 

@@ -22,6 +22,7 @@ with st.sidebar:
 sidebar_style()
         
 def app():
+    #st.write("Asegurate de responder todas las preguntas. Todas las respuestas seleccionadas estarán en rojo")
 
     st.header('Preguntas Sociodemográficas')
     # PREGUNTAS RELACIONADAS AL HOGAR
@@ -152,3 +153,20 @@ def app():
 
         )
 
+    # Verificar si todas las preguntas han sido respondidas
+    all_answered = all(st.session_state[key] is not None for key in session_keys + [q["session_key"] for q in questions])
+
+    # Botón de siguiente deshabilitado si no se han respondido todas las preguntas
+    # Colocar los botones en la parte inferior
+    col1, col2, col3 = st.columns([1, 4, 1])
+
+    with col3:
+        if st.button("Siguiente ➡️", key="next_button"):
+            if all_answered:
+                st.session_state.page = "P02_sleep"  # Cambia esto según corresponda
+                st.rerun()
+            else:
+                st.error("Por favor, responda todas las preguntas antes de continuar.")
+
+
+    
