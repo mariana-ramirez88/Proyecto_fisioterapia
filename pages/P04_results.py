@@ -5,9 +5,31 @@ import numpy as np
 from pages.P01_home import sidebar_style
 from PIL import Image
 import base64
+import requests
+import uuid
 
 
 sidebar_style()
+
+def guardar_en_redcap(dataframe):
+    API_URL = "https://redcap.unisabana.edu.co/api/"
+    API_TOKEN = "A625CE503A884C0EC3C828A42B9CC133"  
+
+    records = dataframe.to_dict(orient='records')
+    payload = {
+        'token': API_TOKEN,
+        'content': 'record',
+        'format': 'json',
+        'type': 'flat',
+        'overwriteBehavior': 'normal',
+        'data': str(records).replace("'", '"'),  # JSON válido
+        'returnContent': 'count',
+        'returnFormat': 'json'
+    }
+
+    response = requests.post(API_URL, data=payload)
+    return response.json()
+
 
 def app():
     st.title("Resultados de la Encuesta")
@@ -42,6 +64,7 @@ def app():
     activity_football_value = st.session_state["user_activity_football"]
 
     user_df = {
+        "record_id" : str(uuid.uuid4()),
         'sleep_factor_5': promedioF5, 'home_laundry': home_laundry,
         'sleep_factor_2': promedioF2, 'home_room': home_room,
         'mobile_dependency': promedio_mobile, 'age_group_16-18': age,
@@ -52,6 +75,17 @@ def app():
     }
 
     user_df = pd.DataFrame([user_df])
+     # ✅ Guardar en REDCap
+    user_df.columns = user_df.columns.str.replace('-', '_')
+    redcap_result = guardar_en_redcap(user_df)
+    st.success("✅ Datos enviados a REDCap correctamente")
+    st.write("Respuesta de REDCap:", redcap_result)
+    # evita problemas con nombres en re cap
+    # ✅ Renombrar solo la columna necesaria para el modelo
+    user_df = user_df.rename(columns={'age_group_16_18': 'age_group_16-18'})
+
+    user_df_for_prediction = user_df.drop(columns=['record_id'])
+
 
     def load_model(filename):
         with open(filename, 'rb') as file:
@@ -60,7 +94,7 @@ def app():
     test_models = load_model('best_models.pkl')
     risk_df_xs = load_model('risk_df_xs.pkl')
 
-    score = np.mean([model.predict_proba(user_df)[0, 1] for model in test_models])
+    score = np.mean([model.predict_proba(user_df_for_prediction)[0, 1] for model in test_models])
     #st.write(f"Obtuviste un puntaje de {score}")
 
     def get_risk_level(score, risk_df):
