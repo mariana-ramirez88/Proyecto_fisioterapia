@@ -7,13 +7,22 @@ from PIL import Image
 import base64
 import requests
 import uuid
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # Carga las variables del archivo .env
+
 
 
 sidebar_style()
 
 def guardar_en_redcap(dataframe):
     API_URL = "https://redcap.unisabana.edu.co/api/"
-    API_TOKEN = "A625CE503A884C0EC3C828A42B9CC133"  
+    API_TOKEN = os.getenv("REDCAP_API_TOKEN")  # Obtiene la variable desde .env
+
+    if API_TOKEN is None:
+        raise ValueError("API_TOKEN no está definido en el archivo .env")
+
 
     records = dataframe.to_dict(orient='records')
     payload = {
@@ -78,8 +87,6 @@ def app():
      # ✅ Guardar en REDCap
     user_df.columns = user_df.columns.str.replace('-', '_')
     redcap_result = guardar_en_redcap(user_df)
-    st.success("✅ Datos enviados a REDCap correctamente")
-    st.write("Respuesta de REDCap:", redcap_result)
     # evita problemas con nombres en re cap
     # ✅ Renombrar solo la columna necesaria para el modelo
     user_df = user_df.rename(columns={'age_group_16_18': 'age_group_16-18'})
