@@ -18,10 +18,10 @@ sidebar_style()
 
 def guardar_en_redcap(dataframe):
     API_URL = "https://redcap.unisabana.edu.co/api/"
-    API_TOKEN = os.getenv("REDCAP_API_TOKEN")  # Obtiene la variable desde .env
+    API_TOKEN = st.secrets["redCap_token"]  # Obtiene la variable desde streamlit secrets
 
     if API_TOKEN is None:
-        raise ValueError("API_TOKEN no está definido en el archivo .env")
+        raise ValueError("API_TOKEN no está definido en secrets de streamlit")
 
 
     records = dataframe.to_dict(orient='records')
