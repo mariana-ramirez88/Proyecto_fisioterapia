@@ -84,15 +84,14 @@ def app():
     }
 
     user_df = pd.DataFrame([user_df])
+
      # ✅ Guardar en REDCap
     user_df.columns = user_df.columns.str.replace('-', '_')
     redcap_result = guardar_en_redcap(user_df)
     # evita problemas con nombres en re cap
     # ✅ Renombrar solo la columna necesaria para el modelo
-    user_df = user_df.rename(columns={'age_group_16_18': 'age_group_16-18'})
-
-    user_df_for_prediction = user_df.drop(columns=['record_id'])
-
+    user_df_for_prediction = user_df.rename(columns={'age_group_16_18': 'age_group_16-18'})
+    user_df_for_prediction = user_df_for_prediction.drop(columns=['record_id'])
 
     def load_model(filename):
         with open(filename, 'rb') as file:
@@ -110,6 +109,12 @@ def app():
                 return row['risk_level'], row['real']
 
     risk_level, risk_value = get_risk_level(score, risk_df_xs)
+    # 4. Añadir resultados al mismo record
+    user_df["risk_value"] = risk_value
+    user_df["risk_level"] = risk_level
+
+    # 5. Guardar nuevamente en REDCap
+    guardar_en_redcap(user_df)
 
     risk_mapping = {
     "low risk": "Tienes un nivel de riesgo BAJO",
